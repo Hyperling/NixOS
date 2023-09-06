@@ -101,8 +101,12 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  ## List packages installed in system profile. ##
+  # To search, run `nix search wget` or visit: https://search.nixos.org/packages
+  ##
+  # TBD
+  # Make each section is own $.nix file and include it based on Ansible checks?
+  ###
   environment.systemPackages = with pkgs; [
     # General
     ansible
@@ -115,10 +119,22 @@
     wget
     nmap
     lynis
+    htop
+    neofetch
+    cowsay
 
     # Coding
     vscodium
     android-studio
+    bash
+    kotlin
+    nodejs
+    ksh
+    zsh
+    zulu # OpenJDK
+    #python2
+    #python
+    python3
 
     # Editing
     shotcut
@@ -129,12 +145,12 @@
     gnomeExtensions.dock-from-dash
     gnome.gnome-tweaks
     gnome.dconf-editor
-    evolution
-    signal-desktop
-    lbry
     librewolf
     firefox
-    htop
+    evolution
+    deltachat-desktop
+    signal-desktop
+    lbry
     libreoffice
     vlc
   ];
