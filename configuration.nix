@@ -91,7 +91,7 @@
   users.users.ling = {
     isNormalUser = true;
     description = "Hyperling";
-    extraGroups = [ "networkmanager" "wheel" "sudo" ];
+    extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" ];
     packages = with pkgs; [
       #firefox
       #thunderbird
@@ -101,12 +101,45 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  ## List packages installed in system profile. ##
-  # To search, run `nix search wget` or visit: https://search.nixos.org/packages
   ##
   # TBD
   # Make each section is own $.nix file and include it based on Ansible checks?
+  # Remove the GNOME default packages.
+  services.gnome.core-utilities.enable = false;
+  # GSettings, DConf type stuff.
+  services.xserver.desktopManager.gnome = {
+    extraGSettingsOverrides = ''
+      # Favorite apps in gnome-shell
+      [org.gnome.shell]
+      favorite-apps= \
+        [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
+        , 'org.gnome.Nautilus.desktop' \
+        , 'io.gitlab.librewolf-community.desktop' \
+        , 'org.mozilla.firefox.desktop' \
+        , 'org.gnome.Evolution.desktop', 'chat.delta.desktop.desktop' \
+        , 'com.vscodium.codium.desktop', 'org.shotcut.Shotcut.desktop' \
+        , 'io.lbry.lbry-app.desktop' \
+        , 'org.signal.Signal.desktop', 'im.riot.Riot.desktop' \
+        , 'org.telegram.desktop.desktop', 'com.discordapp.Discord.desktop' \
+        , 'com.valvesoftware.Steam.desktop' \
+        ]
+
+      # Not being loaded.
+      [org.gnome.shell.extensions.dash-to-dock]
+      dock-position='LEFT'
+      dock-fixed=true
+      dash-max-icon-size=28
+    '';
+
+    extraGSettingsOverridePackages = [
+      pkgs.gnome.gnome-shell # for org.gnome.shell
+      #pkgs.gnome.gnomeExtensions.dock-from-dash # Not sure what to do here yet.
+    ];
+  };
   ###
+
+  ## List packages installed in system profile. ##
+  # To search, run `nix search wget` or visit: https://search.nixos.org/packages
   environment.systemPackages = with pkgs; [
     # General
     ansible
@@ -126,26 +159,34 @@
     # Coding
     vscodium
     android-studio
+    dbeaver
     bash
     kotlin
     nodejs
     ksh
     zsh
     zulu  # OpenJDK
-    zulu8 # OpenJDK 8
+    #zulu8 # OpenJDK 8
     #python2
     #python
     python3
 
     # Editing
+    gimp
     shotcut
     openshot-qt
+    obs-studio
     ffmpeg
 
     # Workstation
     gnomeExtensions.dock-from-dash
     gnome.gnome-tweaks
     gnome.dconf-editor
+    gnome.gnome-terminal
+    gnome.gnome-system-monitor
+    gnome.gedit
+    gnome.geary
+    gnome.evince
     librewolf
     firefox
     evolution
@@ -154,6 +195,7 @@
     lbry
     libreoffice
     vlc
+    remmina
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -164,10 +206,15 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
+  ## List services that you want to enable ##
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
+
+  # Be able to use the locate command.
+  services.locate.locate = pkgs.mlocate;
+  services.locate.localuser = null;
+  services.locate.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
