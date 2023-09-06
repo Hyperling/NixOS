@@ -21,6 +21,9 @@ sudo echo "Success!" &&
 	echo -e "\nSwitching to the new configuration." &&
 	sudo cp "$DIR"/configuration.nix /etc/nixos/configuration.nix &&
 	sudo nixos-rebuild switch &&
+
+	# Completed successfully.
+	echo -e "\nSuccess!" &&
 	exit 0
 
 ## Errors ##
