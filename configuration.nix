@@ -127,6 +127,8 @@
 
     # Workstation
     gnomeExtensions.dock-from-dash
+    gnome.gnome-tweaks
+    gnome.dconf-editor
     evolution
     signal-desktop
     lbry
