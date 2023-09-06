@@ -14,12 +14,12 @@ echo "Requesting sudo password if it has not already been requested recently."
 sudo echo "Success!" &&
 
 	# Essentials, jeez!
-	echo "Making sure that /bin/bash is available." &&
-	sudo ln -vqfs `which bash` /bin/bash &&
+	echo -e "\nMaking sure that /bin/bash is available." &&
+	sudo ln -vfs `which bash` /bin/bash &&
 
 	# Main install.
-	echo "Switching to the new configuration." &&
-	sudo cp $DIR/configuration.nix /etc/nixos/configuration.nix &&
+	echo -e "\nSwitching to the new configuration." &&
+	sudo cp "$DIR"/configuration.nix /etc/nixos/configuration.nix &&
 	sudo nixos-rebuild switch &&
 	exit 0
 
