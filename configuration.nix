@@ -131,7 +131,8 @@
     nodejs
     ksh
     zsh
-    zulu # OpenJDK
+    zulu  # OpenJDK
+    zulu8 # OpenJDK 8
     #python2
     #python
     python3
