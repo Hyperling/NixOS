@@ -105,8 +105,10 @@
   # TBD
   # Make each section is own $.nix file and include it based on Ansible checks?
   # Remove the GNOME default packages.
-  services.gnome.core-utilities.enable = false;
-  # GSettings, DConf type stuff.
+  #services.gnome.core-utilities.enable = false;
+  # GSettings, DConf type stuff. #
+  #   https://nixos.wiki/wiki/GNOME
+  #   https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
   services.xserver.desktopManager.gnome = {
     extraGSettingsOverrides = ''
       # Favorite apps in gnome-shell
@@ -114,17 +116,15 @@
       favorite-apps= \
         [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
         , 'org.gnome.Nautilus.desktop' \
-        , 'io.gitlab.librewolf-community.desktop' \
-        , 'org.mozilla.firefox.desktop' \
-        , 'org.gnome.Evolution.desktop', 'chat.delta.desktop.desktop' \
-        , 'com.vscodium.codium.desktop', 'org.shotcut.Shotcut.desktop' \
-        , 'io.lbry.lbry-app.desktop' \
-        , 'org.signal.Signal.desktop', 'im.riot.Riot.desktop' \
-        , 'org.telegram.desktop.desktop', 'com.discordapp.Discord.desktop' \
-        , 'com.valvesoftware.Steam.desktop' \
+        , 'librewolf.desktop', 'firefox.desktop' \
+        , 'org.gnome.Evolution.desktop', 'deltachat.desktop' \
+        , 'codium.desktop' \
+        , 'org.shotcut.Shotcut.desktop', 'lbry.desktop' \
+        , 'android-studio.desktop' \
+        , 'signal-desktop.desktop' \
         ]
 
-      # Not being loaded.
+      # TBD Need to finish figuring out how to load these.
       [org.gnome.shell.extensions.dash-to-dock]
       dock-position='LEFT'
       dock-fixed=true
@@ -180,6 +180,7 @@
 
     # Workstation
     gnomeExtensions.dock-from-dash
+    gnome.nautilus
     gnome.gnome-tweaks
     gnome.dconf-editor
     gnome.gnome-terminal
