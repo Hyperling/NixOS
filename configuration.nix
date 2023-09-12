@@ -165,6 +165,8 @@
     neofetch
     cowsay
     cron
+    python311
+    python311Packages.psutil
 
     # Coding
     vscodium
@@ -179,7 +181,6 @@
     #zulu8 # OpenJDK 8
     #python2
     #python
-    python3
 
     # Editing
     gimp
