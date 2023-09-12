@@ -112,7 +112,7 @@
 
   ##
   # TBD
-  # Make each section is own $.nix file and include it based on Ansible checks?
+  # Make each section is own $.nix file and include it based on Ansible checks.
   # Remove the GNOME default packages.
   #services.gnome.core-utilities.enable = false;
   # GSettings, DConf type stuff. #
@@ -150,6 +150,7 @@
   ## List packages installed in system profile. ##
   # To search for names, run `nix search wget` or use the website in the header.
   environment.systemPackages = with pkgs; [
+    ##
     # General
     ansible
     vim
@@ -165,9 +166,22 @@
     neofetch
     cowsay
     cron
-    python311
-    python311Packages.psutil
 
+    # Python Setup
+    # Main documentation
+    #   https://nixos.org/manual/nixpkgs/stable/#python
+    # See what modules are available, and which Python they are attached to:
+    #   ls -l $(find "$(dirname $(which python))/.."  -name site-packages)
+    #     Looks like 3.10, not 3.11 like was being installed. So annoying!
+    #   https://discourse.nixos.org/t/python3-not-importing-modules/22061/2
+    (python3.withPackages(ps: with ps; [
+      pip
+      psutil
+    ]))
+    #python3Packages.psutil # This does not work either, nor any 310 type versions.
+    ##
+
+    ##
     # Coding
     vscodium
     android-studio
@@ -181,14 +195,18 @@
     #zulu8 # OpenJDK 8
     #python2
     #python
+    ##
 
+    ##
     # Editing
     gimp
     shotcut
     openshot-qt
     obs-studio
     ffmpeg
+    ##
 
+    ##
     # Workstation
     gnomeExtensions.dock-from-dash
     gnome.nautilus
@@ -208,6 +226,7 @@
     libreoffice
     vlc
     remmina
+    ##
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
