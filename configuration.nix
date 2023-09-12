@@ -2,6 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# NixOS Manual Website
+#   https://nixos.org/manual/nixos/stable/
+
+# Full documentation on all options available.
+#   TBD: I found it at one point and didn't know it'd be so hard to find again.
+
+# Package Search
+#   https://search.nixos.org/packages
+
 { config, pkgs, ... }:
 
 {
@@ -139,7 +148,7 @@
   ###
 
   ## List packages installed in system profile. ##
-  # To search, run `nix search wget` or visit: https://search.nixos.org/packages
+  # To search for names, run `nix search wget` or use the website in the header.
   environment.systemPackages = with pkgs; [
     # General
     ansible
@@ -155,6 +164,7 @@
     htop
     neofetch
     cowsay
+    cron
 
     # Coding
     vscodium
