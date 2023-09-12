@@ -152,7 +152,7 @@
   environment.systemPackages = with pkgs; [
     ##
     # General
-    ansible
+    #ansible # try installing under Python then maybe it can use psutil?
     vim
     mlocate
     git
@@ -174,11 +174,16 @@
     #   ls -l $(find "$(dirname $(which python))/.."  -name site-packages)
     #     Looks like 3.10, not 3.11 like was being installed. So annoying!
     #   https://discourse.nixos.org/t/python3-not-importing-modules/22061/2
+    #python3
     (python3.withPackages(ps: with ps; [
-      pip
-      psutil
+      pip    # Works fine! Can access via `pip` or `python -m pip`.
+      psutil # Not working. Not in path nor `-m`. Maybe not supposed to be, but ansible dconf module still saying "ModuleNotFoundError: No module named 'psutil'" Maybe add to ansible's python somehow?
+      ansible # Nope, not accessible!!! WHAT!!!
+      ansible-core # It's here! Thanks https://pypi.org/project/ansible/, psutil still not available though!!!!!!!!!!!!!
     ]))
+    #python3Packages.pip
     #python3Packages.psutil # This does not work either, nor any 310 type versions.
+    #python3Packages.ansible # This does not work either, nor any 310 type versions.
     ##
 
     ##
