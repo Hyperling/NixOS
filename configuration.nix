@@ -2,22 +2,50 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-# NixOS Manual Website
-#   https://nixos.org/manual/nixos/stable/
+##
+# Helpful Documentation
+#
+#   NixOS Manual:
+#     https://nixos.org/manual/nixos/stable/
+#
+#   NixOS All Options:
+#      https://nixos.org/manual/nixos/stable/options.html
+#
+#   Option Search:
+#     https://search.nixos.org/options
+#
+#   Package Search:
+#     https://search.nixos.org/packages
+###
 
-# Full documentation on all options available.
-#   TBD: I found it at one point and didn't know it'd be so hard to find again.
+##
+# TBD
+# Make each section is own $.nix file and include it based on Ansible checks.
+###
 
-# Package Search
-#   https://search.nixos.org/packages
-
-{ config, pkgs, ... }:
+{ config, pkgs, nix, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  ##
+  # System Configuration
+  ###
+
+  imports =[
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "23.05"; # Did you read the comment?
+
+  ##
+  # System Package Configuration
+  ###
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -32,6 +60,25 @@
   # Enable grub cryptodisk
   boot.loader.grub.enableCryptodisk=true;
 
+  # TBD: Does not work. Goes in "nix.conf"?
+  #nix.extraOptions = "
+  #  --extra-experimental-features
+  #";
+
+  ##
+  # General Networking Configuration
+  ###
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # TBD: Should this be here?
   boot.initrd.luks.devices."luks-39ae7203-d5af-47bf-95f6-b4f0eefebfc6".keyFile = "/crypto_keyfile.bin";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -39,8 +86,9 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+  ##
+  # Locale
+  ###
 
   # Set your time zone.
   time.timeZone = "America/Phoenix";
@@ -60,12 +108,50 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  ##
+  # Desktop Environment
+  ###
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+
+  # Remove the GNOME default packages.
+  #services.gnome.core-utilities.enable = false;
+
+  # GSettings, DConf type stuff. #
+  #   https://nixos.wiki/wiki/GNOME
+  #   https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
+  services.xserver.desktopManager.gnome = {
+    extraGSettingsOverrides = ''
+      # Favorite apps in gnome-shell
+      [org.gnome.shell]
+      favorite-apps= \
+        [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
+        , 'org.gnome.Nautilus.desktop' \
+        , 'librewolf.desktop', 'firefox.desktop' \
+        , 'org.gnome.Evolution.desktop', 'deltachat.desktop' \
+        , 'codium.desktop' \
+        , 'org.shotcut.Shotcut.desktop', 'lbry.desktop' \
+        , 'android-studio.desktop' \
+        , 'signal-desktop.desktop' \
+        ]
+
+      # TBD Need to finish figuring out how to load these.
+      [org.gnome.shell.extensions.dash-to-dock]
+      dock-position='LEFT'
+      dock-fixed=true
+      dash-max-icon-size=28
+    '';
+
+    extraGSettingsOverridePackages = [
+      pkgs.gnome.gnome-shell # for org.gnome.shell, not sure if it works TBD.
+      #pkgs.gnomeExtensions.dash-to-dock # TBD Not sure what to do here yet.
+    ];
+  };
 
   # Configure keymap in X11
   services.xserver = {
@@ -96,56 +182,27 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  ##
+  # User Setup
+  ###
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ling = {
     isNormalUser = true;
     description = "Hyperling";
     extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" ];
-    packages = with pkgs; [
-      #firefox
-      #thunderbird
-    ];
+    #packages = with pkgs; [
+    #  #firefox
+    #  #thunderbird
+    #];
   };
+
+  ##
+  # Package Management
+  ###
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  ##
-  # TBD
-  # Make each section is own $.nix file and include it based on Ansible checks.
-  # Remove the GNOME default packages.
-  #services.gnome.core-utilities.enable = false;
-  # GSettings, DConf type stuff. #
-  #   https://nixos.wiki/wiki/GNOME
-  #   https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
-  services.xserver.desktopManager.gnome = {
-    extraGSettingsOverrides = ''
-      # Favorite apps in gnome-shell
-      [org.gnome.shell]
-      favorite-apps= \
-        [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
-        , 'org.gnome.Nautilus.desktop' \
-        , 'librewolf.desktop', 'firefox.desktop' \
-        , 'org.gnome.Evolution.desktop', 'deltachat.desktop' \
-        , 'codium.desktop' \
-        , 'org.shotcut.Shotcut.desktop', 'lbry.desktop' \
-        , 'android-studio.desktop' \
-        , 'signal-desktop.desktop' \
-        ]
-
-      # TBD Need to finish figuring out how to load these.
-      [org.gnome.shell.extensions.dash-to-dock]
-      dock-position='LEFT'
-      dock-fixed=true
-      dash-max-icon-size=28
-    '';
-
-    extraGSettingsOverridePackages = [
-      pkgs.gnome.gnome-shell # for org.gnome.shell
-      #pkgs.gnome.gnomeExtensions.dock-from-dash # Not sure what to do here yet.
-    ];
-  };
-  ###
 
   ## List packages installed in system profile. ##
   # To search for names, run `nix search wget` or use the website in the header.
@@ -213,11 +270,11 @@
 
     ##
     # Workstation
-    gnomeExtensions.dock-from-dash
+    gnomeExtensions.dash-to-dock
     gnome.nautilus
     gnome.gnome-tweaks
     gnome.dconf-editor
-    gnome.gnome-terminal
+    #gnome.gnome-terminal # This does not theme well and is different from Console.
     gnome.gnome-system-monitor
     gnome.gedit
     gnome.geary
@@ -245,26 +302,38 @@
 
   ## List services that you want to enable ##
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  # Configure the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+    ports = [
+      22
+      222
+      2222
+      22222
+    ];
+    settings = {
+      PermitRootLogin = "no";
+      AllowTcpForwarding = "no";
+      ClientAliveInterval = 60;
+      ClientAliveCountMax = 2;
+      Compression = "no";
+      LogLevel = "VERBOSE";
+      MaxAuthTries = 3;
+      MaxSessions = 2;
+      TCPKeepAlive = "no";
+      X11Forwarding = false;
+      AllowAgentForwarding = "no";
+      PermitEmptyPasswords = "no";
+    };
+  };
+
+  ##
+  # Non-System Package Configuration
+  ###
 
   # Be able to use the locate command.
   services.locate.locate = pkgs.mlocate;
   services.locate.localuser = null;
   services.locate.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
 
 }
