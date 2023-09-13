@@ -231,6 +231,7 @@
     libreoffice
     vlc
     remmina
+    imagemagick
     ##
   ];
 
