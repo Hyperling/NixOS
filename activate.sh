@@ -6,12 +6,25 @@
 DIR="$(dirname -- "${BASH_SOURCE[0]}")"
 PROG="$(basename -- "${BASH_SOURCE[0]}")"
 
+nix_ext="nix"
+nixos_dir="/etc/nixos"
+date_YYYYMMDD="`date "+%Y%m%d"`"
+backup_dir="$nixos_dir/${date_YYYYMMDD}_Backups"
+
 ## Main ##
 
 echo "Requesting sudo password if it has not already been requested recently."
+sudo echo "Success!"
+
+# Make a backup if one does not already exist for today.
+if [[ ! -e "$backup_dir" ]]; then
+	echo -e "\nSaving backups for today."
+	sudo mkdir -pv "$backup_dir"
+	sudo cp -v "$nixos_dir"/*."$nix_ext" "$backup_dir"/
+fi
 
 # Start the chain.
-sudo echo "Success!" &&
+sleep 0 &&
 
 	# Essentials, jeez!
 	echo -e "\nMaking sure that /bin/bash is available." &&
@@ -19,7 +32,7 @@ sudo echo "Success!" &&
 
 	# Main install.
 	echo -e "\nSwitching to the new configuration." &&
-	sudo cp "$DIR"/configuration.nix /etc/nixos/configuration.nix &&
+	sudo cp "$DIR"/*."$nix_ext" "$nixos_dir"/ &&
 	sudo nixos-rebuild switch &&
 
 	# Completed successfully.
