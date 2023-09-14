@@ -124,34 +124,54 @@
 
   # GSettings, DConf type stuff. #
   #   https://nixos.wiki/wiki/GNOME
+  #services.xserver.desktopManager.gnome = {
+  #  extraGSettingsOverrides = ''
+  #    # Favorite apps in gnome-shell
+  #    [org.gnome.shell]
+  #    favorite-apps= \
+  #      [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
+  #      , 'org.gnome.Nautilus.desktop' \
+  #      , 'librewolf.desktop', 'firefox.desktop' \
+  #      , 'org.gnome.Evolution.desktop', 'deltachat.desktop' \
+  #      , 'codium.desktop' \
+  #      , 'org.shotcut.Shotcut.desktop', 'lbry.desktop' \
+  #      , 'android-studio.desktop' \
+  #      , 'signal-desktop.desktop' \
+  #      ]
+#
+  #    # TBD Need to finish figuring out how to load these.
+  #    [org.gnome.shell.extensions.dash-to-dock]
+  #    dock-position='LEFT'
+  #    dock-fixed=true
+  #    dash-max-icon-size=28
+  #  '';
+#
+  #  extraGSettingsOverridePackages = [
+  #    pkgs.gnome.gnome-shell # for org.gnome.shell, not sure if it works TBD.
+  #    #pkgs.gnomeExtensions.dash-to-dock # TBD Not sure what to do here yet.
+  #  ];
+  #};
+  # Maybe try this?
   #   https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
-  services.xserver.desktopManager.gnome = {
-    extraGSettingsOverrides = ''
-      # Favorite apps in gnome-shell
-      [org.gnome.shell]
-      favorite-apps= \
-        [ 'org.gnome.Terminal.desktop', 'gnome-system-monitor.desktop' \
-        , 'org.gnome.Nautilus.desktop' \
-        , 'librewolf.desktop', 'firefox.desktop' \
-        , 'org.gnome.Evolution.desktop', 'deltachat.desktop' \
-        , 'codium.desktop' \
-        , 'org.shotcut.Shotcut.desktop', 'lbry.desktop' \
-        , 'android-studio.desktop' \
-        , 'signal-desktop.desktop' \
-        ]
-
-      # TBD Need to finish figuring out how to load these.
-      [org.gnome.shell.extensions.dash-to-dock]
-      dock-position='LEFT'
-      dock-fixed=true
-      dash-max-icon-size=28
-    '';
-
-    extraGSettingsOverridePackages = [
-      pkgs.gnome.gnome-shell # for org.gnome.shell, not sure if it works TBD.
-      #pkgs.gnomeExtensions.dash-to-dock # TBD Not sure what to do here yet.
-    ];
-  };
+  #programs.dconf.enable = true;
+  #dconf.settings = {
+  #  "org/gnome/shell/" = {
+  #    favorite-apps = [
+  #      "org.gnome.Terminal.desktop"
+  #      "gnome-system-monitor.desktop"
+  #      "org.gnome.Nautilus.desktop"
+  #      "librewolf.desktop"
+  #      "firefox.desktop"
+  #      "org.gnome.Evolution.desktop"
+  #      "deltachat.desktop"
+  #      "codium.desktop"
+  #      "org.shotcut.Shotcut.desktop"
+  #      "lbry.desktop"
+  #      "android-studio.desktop"
+  #      "signal-desktop.desktop"
+  #    ];
+  #  };
+  #};
 
   # Configure keymap in X11
   services.xserver = {
