@@ -210,7 +210,7 @@
   users.users.ling = {
     isNormalUser = true;
     description = "Hyperling";
-    extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" ];
+    extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" "docker" ];
     #packages = with pkgs; [
     #  #firefox
     #  #thunderbird
@@ -320,6 +320,15 @@
     #exodus # Not being found, 403 error.
     monero-gui
     ###
+
+    ###
+    # Server
+    ##
+    # Not needed, prefer setting 'virtualisation.docker.enable'.
+    #docker
+    #docker-buildx
+    #docker-compose
+    ###
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -365,5 +374,8 @@
   services.locate.locate = pkgs.mlocate;
   services.locate.localuser = null;
   services.locate.enable = true;
+
+  # Docker
+  virtualisation.docker.enable = true;
 
 }
