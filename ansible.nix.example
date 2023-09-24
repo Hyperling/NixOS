@@ -7,4 +7,19 @@
   # tasks/general/software/swap.yml
   # Use general.ini to set up the swap commands and this should be generated.
   swapDevices = [ { device = "/swapfile"; } ];
+
+  ###
+  # TBD
+  ##
+  # Should this file include others? Or use blockinfile? searching for the
+  # headers below and then add their contents if they are wanted? Doing more
+  # includes might get messy, would probably want an entire ansible folder
+  # rather than adding more stuff to the roor /etc/nixos directory.
+  ###
+
+  ## General ##
+
+  ## Workstation ##
+
+  ## Server ##
 }
