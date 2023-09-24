@@ -22,8 +22,6 @@
 
   boot.initrd.luks.devices."luks-1337-h4x0r-c00l-3ncrypt10n".device = "/dev/disk/by-uuid/more-alphabet-soup";
 
-  swapDevices = [ /swapfile ];
-
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction

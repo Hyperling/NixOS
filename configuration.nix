@@ -33,6 +33,10 @@
   imports =[
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    # Include any static entries that are handled outside of this project.
+    ./static.nix
+    # Include anything that Ansible has created.
+    ./ansible.nix
   ];
 
   # This value determines the NixOS release from which the default

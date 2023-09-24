@@ -1,0 +1,9 @@
+# File for adding system-specific configurations outside of any project, system,
+# or ansible maintained files. Any specific recommendations are below.
+{ config, pkgs, nix, ... }:
+
+{
+  # This would be a good place to set up your swap file or partition if not
+  # using the Ansible project. It maintains this in ansible.nix, not here.
+  swapDevices = [ { device = "/swapfile"; } ];
+}

@@ -1,0 +1,10 @@
+# The ansible.nix file is for the Hyperling Ansible project to maintain. It
+# should never be altered by hand unless Ansible has been turned off cron.
+#   https://github.com/Hyperling/ansible
+{ config, pkgs, nix, ... }:
+
+{
+  # tasks/general/software/swap.yml
+  # Use general.ini to set up the swap commands and this should be generated.
+  swapDevices = [ { device = "/swapfile"; } ];
+}

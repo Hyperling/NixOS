@@ -23,6 +23,18 @@ if [[ ! -e "$backup_dir" ]]; then
 	sudo cp -v "$nixos_dir"/*."$nix_ext" "$backup_dir"/
 fi
 
+# Ensure unmaintained files exist for import.
+nix_static=$nixos_dir/static.nix
+if [[ ! -e $nix_static ]]; then
+	echo "Creating '$nix_static'."
+	echo -e "{ config, pkgs, nix, ... }:\n\n{\n  #\n}" | sudo tee $nix_static
+fi
+nix_ansible=$nixos_dir/ansible.nix
+if [[ ! -e $nix_ansible ]]; then
+	echo "Creating '$nix_ansible' from '$nix_static'."
+	cp -v $nix_static $nix_ansible
+fi
+
 # Start the chain.
 sleep 0 &&
 
