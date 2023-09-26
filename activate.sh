@@ -42,6 +42,13 @@ sleep 0 &&
 	echo -e "\nMaking sure that /bin/bash is available." &&
 	sudo ln -vfs `which bash` /bin/bash &&
 
+	# Install Home Manager for usage in configuration.nix type files.
+	echo -e "\nAdd Home Manager." &&
+	sudo nix-channel \
+		--add https://github.com/nix-community/home-manager/archive/master.tar.gz \
+		home-manager
+	sudo nix-channel --update
+
 	# Main install.
 	echo -e "\nSwitching to the new configuration." &&
 	sudo cp "$DIR"/*."$nix_ext" "$nixos_dir"/ &&

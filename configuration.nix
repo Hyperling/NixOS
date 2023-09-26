@@ -37,6 +37,8 @@
     ./static.nix
     # Include anything that Ansible has created.
     ./ansible.nix
+    # Home Manager.
+    <home-manager/nixos>
   ];
 
   # This value determines the NixOS release from which the default
@@ -113,6 +115,21 @@
   };
 
   #############################################################################
+  # User Setup
+  #############################################################################
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.ling = {
+    isNormalUser = true;
+    description = "Hyperling";
+    extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" "docker" ];
+    #packages = with pkgs; [
+    #  #firefox
+    #  #thunderbird
+    #];
+  };
+
+  #############################################################################
   # Desktop Environment
   #############################################################################
 
@@ -126,7 +143,9 @@
   # Remove the GNOME default packages.
   #services.gnome.core-utilities.enable = false;
 
-  # GSettings, DConf type stuff. #
+  ###
+  # GSettings, DConf type stuff.
+  ##
   #   https://nixos.wiki/wiki/GNOME
   #services.xserver.desktopManager.gnome = {
   #  extraGSettingsOverrides = ''
@@ -142,19 +161,20 @@
   #      , 'android-studio.desktop' \
   #      , 'signal-desktop.desktop' \
   #      ]
-#
+  #
   #    # TBD Need to finish figuring out how to load these.
   #    [org.gnome.shell.extensions.dash-to-dock]
   #    dock-position='LEFT'
   #    dock-fixed=true
   #    dash-max-icon-size=28
   #  '';
-#
+  #
   #  extraGSettingsOverridePackages = [
   #    pkgs.gnome.gnome-shell # for org.gnome.shell, not sure if it works TBD.
   #    #pkgs.gnomeExtensions.dash-to-dock # TBD Not sure what to do here yet.
   #  ];
   #};
+
   # Maybe try this?
   #   https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
   #programs.dconf.enable = true;
@@ -176,6 +196,26 @@
   #    ];
   #  };
   #};
+
+  # Or this?
+  # https://rycee.gitlab.io/home-manager/index.html#sec-install-nixos-module
+  # https://rycee.gitlab.io/home-manager/options.html#opt-dconf.settings
+  #programs.dconf.enable = true;
+  #home-manager.users.ling = { pkgs, ... }: {
+  #
+  #  home.packages = [ pkgs.atool pkgs.httpie ];
+  #
+  #  dconf.settings = {
+  #    "/org/gnome/shell/extensions/dash-to-dock" = {
+  #      dock-position = "'LEFT'";
+  #      dock-fixed = true;
+  #      dash-max-icon-size = 24;
+  #    };
+  #  };
+  #
+  #};
+
+  ##
 
   # Configure keymap in X11
   services.xserver = {
@@ -205,21 +245,6 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
-  #############################################################################
-  # User Setup
-  #############################################################################
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.ling = {
-    isNormalUser = true;
-    description = "Hyperling";
-    extraGroups = [ "networkmanager" "wheel" "sudo" "mlocate" "docker" ];
-    #packages = with pkgs; [
-    #  #firefox
-    #  #thunderbird
-    #];
-  };
 
   #############################################################################
   # Package Management
