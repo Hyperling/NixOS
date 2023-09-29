@@ -310,6 +310,7 @@
     #zulu8 # OpenJDK 8
     #python2
     #python
+    godot
     ###
 
     ###
