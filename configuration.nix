@@ -275,6 +275,7 @@
     neofetch
     cowsay
     cron
+    zsh
 
     # Python Setup
     # Main documentation
