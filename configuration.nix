@@ -311,7 +311,8 @@
     #zulu8 # OpenJDK 8
     #python2
     #python
-    godot
+    # godot # If using C#
+    godot_4 # If using Godot Script
     ###
 
     ###
