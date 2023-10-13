@@ -347,6 +347,7 @@
     vlc
     remmina
     imagemagick
+    etcher
 
     # Wallets
     #exodus # Not being found, 403 error.
