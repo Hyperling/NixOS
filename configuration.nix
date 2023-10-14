@@ -380,9 +380,6 @@
     enable = true;
     ports = [
       22
-      222
-      2222
-      22222
     ];
     settings = {
       PermitRootLogin = "no";
