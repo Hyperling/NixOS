@@ -347,7 +347,7 @@
     vlc
     remmina
     imagemagick
-    etcher
+    #etcher # Broken as of 20231013, uses too old a version of Electron.
 
     # Wallets
     #exodus # Not being found, 403 error.
