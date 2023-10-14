@@ -348,6 +348,7 @@
     remmina
     imagemagick
     #etcher # Broken as of 20231013, uses too old a version of Electron.
+    transmission
 
     # Wallets
     #exodus # Not being found, 403 error.
